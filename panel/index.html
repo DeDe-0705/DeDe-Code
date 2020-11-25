@@ -1,0 +1,80 @@
+<!DOCTYPE html>    
+<html lang="en">
+    <header>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <ui-prop name = "xlsx 文件路径:">
+            <ui-input class = "flex-1" v-value = "file" placeholder = "文件路径" readonly></ui-input>
+            <ui-button v-on:click = "_importFile">导入文件</ui-button>
+            <div v-show = "_fileType1()">
+                <ui-input v-value = "csv_name" type = "string" readonly placeholder = "文件名"></ui-input>
+            </div>
+            <div v-if = "_fileType2()">
+                <div v-if = "table.sheetName.length > 0">
+                    <ui-select id = "selector" @change = "_selection($event)">
+                        <option value = "a" selected = "true">请选择...</option>
+                        <option v-for = "(index,sel) in table.sheetName" 
+                        :value = "index"
+                        :key = "index.id">{{sel.name}}</option>
+                    </ui-select>
+                </div>
+                <div v-else>
+                    <ui-select id = "selector">
+                        <option value = "a" selected = "true">请选择...</option>
+                    </ui-select>
+                </div>
+            </div>
+        </ui-prop>
+    </header>
+    <body>
+        <section>
+            <ui-box-container class = "shadow" style="height: 400px; width: 400px; overflow:scroll">
+                <div class = "Display">
+                    <div v-if = "initSearch">
+                        <label class = "label">搜索:</label>
+                        <input v-model = 'search' type="text" size="20" style="width:60%; height:auto" placeholder = "请输入搜索内容"></input>
+                        <button v-on:click = "_startSearch">搜索</button>
+                        <br>
+                    </div>
+                    <div v-show = "display">
+                        <div class = "rec" v-for="(index,row) in table.head">
+                            <span class="data" v-for="(index,item) in row">
+                                <ui-input type = "text" v-value="item" readonly></ui-input>
+                            </span>
+                            <ui-button disabled>只读</ui-button>
+                        </div>
+            
+                        <div v-if = "searchKey">
+                            <div class = "rec" v-for = "(index,row) in searchData">
+                                <span class = "data" v-for = "item in row">
+                                    <ui-input v-value="item" @change = '_onChange'></ui-input>
+                                </span>
+                                <ui-button v-on:click = "_delete_2(index)">删除</ui-button>
+                            </div>
+                        </div>
+            
+                        <div v-else>
+                            <div class= "rec" v-for = "(index,row) in table.body">
+                                <span class = "data" v-for = "item in row">
+                                    <ui-input v-value="item"></ui-input>
+                                </span>
+                                <ui-button v-on:click = "_delete(index)">删除</ui-button>
+                            </div>
+                            <ui-button v-on:click = "_addNew">添加</ui-button>
+                        </div>
+                    </div>
+                </div>
+             </ui-box-container>
+        </section>
+        
+        <footer>
+            <ui-checkbox v-if = "initBox" id = "checkBox" @change = "_display">显示(如果csv文件数据较大，插件加载会比较卡.)</ui-checkbox>
+            <div class = "buttons">
+                <ui-button v-on:click = "_save_local">保存</ui-button>
+                <ui-button v-on:click = "_save">另存为</ui-button>
+                <ui-button v-on:click = "_save_csv">导出.csv</ui-button>
+                <ui-button v-on:click = "_save_json">导出.json</ui-button>
+            </div>
+        </footer>
+    </body>
+</html>

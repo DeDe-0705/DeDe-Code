@@ -1,0 +1,22 @@
+{
+    "name": "xlsx_helper",
+    "version": "0.0.1",
+    "description": "analysis",
+    "author": "DeDe",
+    "main": "main.js",
+    "main-menu": {
+        "xlsx_helper/open":{
+            "message":"xlsx_helper:open"
+        }
+    },
+    "panel": {
+        "main": "panel/index.js",
+        "popable": true,
+        "type": "dockable",
+        "title": "xlsx_helper",
+        "height": 500
+    },
+    "dependencies": {
+        "node-xlsx": "^0.15.0"
+    }
+}
